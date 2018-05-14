@@ -1,0 +1,44 @@
+#!/bin/sh
+for repos in `cat repolist`
+git clone https://github.com/cloudera/$repos
+sleep 60
+cd $repos
+git branch -r --merged | grep -v HEAD`; do echo -e `git show --format="%ci %cr" $branch | head -n 1` \\t$branch; done | sort -r >> "$repos.txt"
+
+
+
+#!/bin/sh
+for repo in `cat repolist`
+do
+git clone https://www-github.cisco.com/$repos
+for branch in `git -C $repo branch -ar | grep -v HEAD`; do echo -e `git show --format="%ci %cr" $branch | head -n 1` \\t$branch; done | sort -r >> "$repo".txt
+done
+
+
+Diskspace checking:
+#!/bin/bash
+#Intializing Variables
+#you can mention multiple mount points under ARRAY variable with double for monitoring
+#NOTE:- dont put "\" end of mount point directory
+#In case NFS mount point failure, df -h will not run. script will email also.
+#ps -ef | grep -i ksoft |  grep -0 ksoftirqd/1 | grep -v  'grep' | sed "2 d"  {greping first line OR (| sed -n '2!p')}
+array=("/interface_DX1_APS" "/home/dx1adm")
+TIME=$(date | awk '{print $4,$5}')
+df -h>>/dev/null
+if [ $? = "0" ];then
+for monitor in "${array[@]}"; do
+UTZ_PERCNT=$(df -h  $monitor | awk '{print $4}' | cut -d'%' -f1 | tail -n1)
+if [[ "$UTZ_PERCNT" -gt "84" ]] && [[ "$UTZ_PERCNT" -lt "95" ]]; then
+echo -e "Hi,\n\n Please check Below report $TIME \n\n `df -h $monitor`" | mail -s "WARNING:- FS-Alarm for $monitor  `hostname` $TIME" mgochare@in.ibm.com
+else
+if [[ "$UTZ_PERCNT" -gt "94" ]] && [[ "$UTZ_PERCNT" -lt "101" ]]; then
+echo -e "Hi,\n\n Please check Below report $TIME \n\n `df -h $monitor`" | mail -s " CRTICAL:- FS-ALARM for $monitor  `hostname` $TIME" mgochare@in.ibm.com
+fi;
+fi;
+done;
+else
+echo -e "Hi,\n\n monitoring command could not run due to mount points found in hung state, may be NFS mount point $TIME" | mail -s "Any NFS mount-point is unreachable `hostname` $TIME" mgochare@in.
+ibm.com
+fi;
+
+

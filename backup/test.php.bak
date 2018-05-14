@@ -1,0 +1,29 @@
+<html>
+<body>
+<h1>Registration Form</h1>
+<form action="test_insert.php" method="post">
+Firstname: <input type="text" name="firstname" /><br><br>
+Lastname: <input type="text" name="lastname" /><br><br>
+ 
+<input type="submit" />
+</form>
+<form action="test_getdata.php" method="get">
+<input type="submit" value="Get Data">
+</form>
+
+<form action="saveimage.php" enctype="multipart/form-data" method="post">
+<table style="border-collapse: collapse; font: 12px Tahoma;" border="1" cellspacing="5" cellpadding="5">
+<tbody><tr>
+<td>
+<input name="uploadedimage" type="file">
+</td>
+</tr>
+<tr>
+<td>
+<input name="Upload Now" type="submit" value="Upload Image">
+</tr>
+</tbody></table>
+</form>
+
+</body>
+</html>
